@@ -67,11 +67,7 @@ Shader "Unlit/FirstShaderMultiUV"
             half4 frag (Varyings IN) : SV_Target
             {
 
-                half4 baseTex = SAMPLE_TEXTURE2D(
-                    _BaseMap,
-                    sampler_BaseMap,
-                    IN.uv
-                );
+                half4 baseTex = SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, IN.uv);
 
                 return half4(baseTex.rgb * _BaseColor.rgb, 1.0);
             }

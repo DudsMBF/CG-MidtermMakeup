@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -10,12 +11,13 @@ public class Player : MonoBehaviour
     private CharacterController characterController;
     private Vector3 playerVelocity; 
     private float speed;
+    public string[] attributes;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         characterController = gameObject.GetComponent<CharacterController>();
-        renderer = this.GetComponent<Renderer>();
+        renderer = gameObject.GetComponent<Renderer>();
         playerMaterial = renderer.material;
         currentHP = maxHealth;
     }
@@ -44,17 +46,24 @@ public class Player : MonoBehaviour
         transform.Translate(verticalTranslation, horTranslation, 0);
     }
 
-    public IEnumerator TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         currentHP -= damage;
 
+        StartCoroutine(ChangeUV());
+    }
+
+    public IEnumerator ChangeUV()
+    {
         float previousUV = playerMaterial.GetFloat("_UVSET");
         playerMaterial.SetFloat("_UVSET", 1f);
+        Debug.Log("current UV: " + playerMaterial.GetFloat("_UVSET"));
 
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(2);
 
         playerMaterial.SetFloat("_UVSET", previousUV);
+        Debug.Log("current UV: " + playerMaterial.GetFloat("_UVSET"));
 
-        Debug.Log("Player took damage");
+        Debug.Log("Player took damage. Current HP: " + currentHP);
     }
 }
